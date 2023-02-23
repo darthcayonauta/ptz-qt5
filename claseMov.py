@@ -148,7 +148,7 @@ class MoverCam:
         request.Velocity.Zoom.x = 1
         request.Velocity.PanTilt.x = 0
         request.Velocity.PanTilt.y = 0
-        self.perform_move(ptz, request, self.timeout)
+        self.perform_move(ptz, request, 0.25)
 
     '''
     zoom_down(): disminuyes zoom
@@ -160,7 +160,7 @@ class MoverCam:
         request.Velocity.Zoom.x = -1
         request.Velocity.PanTilt.x = 0
         request.Velocity.PanTilt.y = 0
-        self.perform_move(ptz, request, self.timeout)
+        self.perform_move(ptz, request, 0.25)
 
     '''
     move_diagonal_sup_der(): mueves diagonal arriba

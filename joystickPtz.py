@@ -44,18 +44,20 @@ class Mando:
 
                     elif pygame.joystick.Joystick(0).get_button(4) :
                         print("Presionaste el Boton 5 (L1)/ Adjuste 1")
-                        #self.diagonalIzqSup()
+                        
                     
                     elif pygame.joystick.Joystick(0).get_button(5) :
                         print("Presionaste el Boton 6 (R1)/ ZOOM In")
+                        time.sleep(0.5)
                         self.zoomIn()
 
                     elif pygame.joystick.Joystick(0).get_button(6) :
                         print("Presionaste el Boton 7 (L2)/ Adjuste 2")
-                        #self.diagonalIzqSup()
+                        
 
                     elif pygame.joystick.Joystick(0).get_button(7) :
                         print("Presionaste el Boton 8 (R2)/ ZOOM Out")
+                        time.sleep(0.5)
                         self.zoomOut()
 
 
@@ -64,27 +66,27 @@ class Mando:
                     y_speed = round(pygame.joystick.Joystick(0).get_axis(1))
        
                     if x_speed == 0 and y_speed == -1 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direccionando hacia ARRIBA")
                         self.moveUp()
 
                     elif x_speed == 0 and y_speed == 1 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direcionando hacia ABAJO")
                         self.moveDown()
 
                     elif x_speed ==1 and y_speed == 0 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direcionando hacia la DERECHA")
                         self.moveRight()
 
                     elif x_speed == -1 and y_speed == 0 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direcionando hacia la IZQUIERDA")
                         self.moveLeft()
 
                     elif x_speed == -1 and y_speed == -1 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direcionando hacia la IZQUIERDA y ARRIBA")
                         self.diagonalIzqSup()
 
@@ -93,12 +95,12 @@ class Mando:
                         self.diagonalDerSup()
 
                     elif x_speed == -1 and y_speed == 1 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direcionando hacia la IZQUIERDA y ABAJO")
                         self.diagonalIzqInf()
                     
                     elif x_speed == 1 and y_speed == 1 :
-                        time.sleep(1)
+                        time.sleep(0.5)
                         print("Direcionando hacia la DERECHA y ABAJO")
                         self.diagonalDerInf()
 
