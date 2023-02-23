@@ -103,6 +103,7 @@ class MoverCam:
         request.Velocity.PanTilt.y = self.YMAX
         self.perform_move(ptz, request, self.timeout)
 
+
     '''
     move_down(): mueves hacia abajo
     @ptz
@@ -124,6 +125,7 @@ class MoverCam:
         request.Velocity.PanTilt.x = self.XMAX
         request.Velocity.PanTilt.y = 0
         self.perform_move(ptz, request, self.timeout)
+
 
     '''
     move_left(): mueves hacia la izquierda
@@ -161,12 +163,68 @@ class MoverCam:
         self.perform_move(ptz, request, self.timeout)
 
     '''
+    move_diagonal_sup_der(): mueves diagonal arriba
+    @ptz
+    @request
+    ID : 7
+    return void
+    '''
+    def move_diagonal_sup_der(self,ptz,request) :
+        print("move diagonal superior derecha")
+        request.Velocity.PanTilt.x = self.XMAX
+        request.Velocity.PanTilt.y = self.YMAX
+        self.perform_move(ptz, request, self.timeout)
+
+    '''
+    move_diagonal_inf_der(): mueves diagonal abajo
+    @ptz
+    @request
+    ID : 8
+    return void
+    '''
+    def move_diagonal_inf_der(self,ptz,request) :
+        print("move diagonal inferior derecha")
+        request.Velocity.PanTilt.x = self.XMAX
+        request.Velocity.PanTilt.y = self.YMIN
+        self.perform_move(ptz, request, self.timeout)
+
+    '''
+    move_diagonal_sup_izq(): mueves diagonal izquierda arriba 
+    @ptz
+    @request
+    ID : 9
+    return void
+    '''
+    def move_diagonal_sup_izq(self,ptz,request) :
+        print("move diagonal inferior derecha")
+        request.Velocity.PanTilt.x = self.XMIN
+        request.Velocity.PanTilt.y = self.YMAX
+        self.perform_move(ptz, request, self.timeout)
+
+    '''
+    move_diagonal_inf_izq(): mueves diagonal izquierda abajo
+    @ptz
+    @request
+    ID : 10
+    return void
+    '''
+    def move_diagonal_inf_izq(self,ptz,request) :
+        print("move diagonal inferior izquierda")
+        request.Velocity.PanTilt.x = self.XMIN
+        request.Velocity.PanTilt.y = self.YMIN
+        self.perform_move(ptz, request, self.timeout)
+
+    '''
     @num = 1, hacia arriba
     @num = 2, hacia abajo
     @num = 3, hacia la izquierda
     @num = 4, hacia la derecha
     @num = 5, zoom in
     @num = 6, zoom out
+    @num = 7, diagonal superior derecha
+    @num = 8, diagonal inferior derecha
+    @num = 9, diagonal superior izquierda
+    @num = 10, diagonal inferior izquierda
 
     moves(): llamas al movimiento correspondiente
     @int num
@@ -187,5 +245,13 @@ class MoverCam:
             self.zoom_up(self.ptz,self.request)
         elif num==6:
             self.zoom_down(self.ptz,self.request)
+        elif num == 7 :
+            self.move_diagonal_sup_der(self.ptz,self.request)
+        elif num == 8 :
+            self.move_diagonal_inf_der(self.ptz,self.request)
+        elif num == 9 :
+            self.move_diagonal_sup_izq(self.ptz,self.request)
+        elif num == 10 :
+            self.move_diagonal_inf_izq(self.ptz,self.request)
         else:
             pass

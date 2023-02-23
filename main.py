@@ -190,28 +190,20 @@ class Ui_MainWindow(object):
         hilo.start()
 
     def diagonalIzqSup(self) :
-        #self.obj_mover.moves(1)
-        #self.obj_mover.moves(3)
-        self.moveLeft()
-        self.moveUp()
+        hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':9})
+        hilo.start()
 
     def diagonalIzqInf(self) :
-        #self.obj_mover.moves(2)
-        #self.obj_mover.moves(3)
-        self.moveLeft()
-        self.moveDown()
+        hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':10})
+        hilo.start()
 
     def diagonalDerSup(self) :
-        #self.obj_mover.moves(1)
-        #self.obj_mover.moves(4)
-        self.moveRight()
-        self.moveUp()
+        hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':7})
+        hilo.start()
 
     def diagonalDerInf(self) :
-        #self.obj_mover.moves(2)
-        #self.obj_mover.moves(4)
-        self.moveRight()
-        self.moveDown()
+        hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':8})
+        hilo.start()
     
 
 if __name__ == "__main__":
