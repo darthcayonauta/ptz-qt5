@@ -60,6 +60,8 @@ class MoverCam:
         self.request.ProfileToken = media_profile.token
         self.ptz.Stop({'ProfileToken': media_profile.token})
 
+        
+
         if self.request.Velocity is None:
             self.request.Velocity = self.ptz.GetStatus({'ProfileToken': media_profile.token}).Position
             self.request.Velocity = self.ptz.GetStatus({'ProfileToken': media_profile.token}).Position
