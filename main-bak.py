@@ -21,16 +21,11 @@ from PyQt5.QtGui import QFont, QPixmap, QImage
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QMessageBox
 import sys
 from claseMov import *
-from joystickPtz import *
 import threading
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        super().__init__()
-        self.mando = Mando()
-        #self.mando.process()
-        
 
         self.user    = 'admin'
         self.passw   = 'Admin321'
@@ -112,7 +107,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-       
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -135,8 +129,6 @@ class Ui_MainWindow(object):
         self.videoLabel.setText("NO IMAGE")
         self.videoLabel.setStyleSheet("background-color: #000000;color:#FFFFFF;text-align:center;")
         print("llamando funciones....")
-        
-        
         self.showCam()
 
         #llamando a funciones PTZ
@@ -151,7 +143,7 @@ class Ui_MainWindow(object):
         self.btn_zoomIn.clicked.connect(self.zoomIn)
         self.btn_zoomOut.clicked.connect(self.zoomOut)
 
-
+    
     #mostrar imagenes
     def showCam(self) :
         self.thread = QThread()
@@ -160,8 +152,6 @@ class Ui_MainWindow(object):
         self.videoPTZ.moveToThread( self.thread )
         self.thread.started.connect( self.videoPTZ.run )
         self.thread.start()
-
-     
 
     def ch_signal(self,px) : 
         QImg = QImage(px, self.w, self.h, QImage.Format_RGB888)        
@@ -226,4 +216,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
