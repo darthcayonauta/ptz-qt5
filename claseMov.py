@@ -1,8 +1,9 @@
 '''
+@file    : claseMov.py
 @class   : MoverCam
 @author  : Claudio Guzmán Herrera
 @version : 1.0
-@package : CAM-TK
+@package : PTZ-QT5
 
 Uso, ejemplo:
 ob_moves = MoverCam('192.168.78.90','admin','somePassword')

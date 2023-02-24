@@ -28,7 +28,7 @@ import threading
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         super().__init__()
-        self.mando = Mando()
+        #self.mando = Mando()
         #self.mando.process()
         
 

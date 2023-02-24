@@ -1,16 +1,29 @@
+'''
+@file    : joystickPtz.py
+@class   : Mando
+@author  : Claudio Guzmán Herrera
+@version : 1.0
+@package : PTZ-QT5
+
+Uso, ejemplo:
+mando = Mando('admin','Admin321','192.168.78.90')
+mando.process()
+
+'''
+
 import pygame
 from claseMov import *
 import threading
 import time
 
 class Mando:
-    def __init__(self) :
+    def __init__(self,user,passwd,ip) :
        pygame.joystick.init()
        self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
        self.clock     = pygame.time.Clock()
-       self.user    = 'admin'
-       self.passw   = 'Admin321'
-       self.ip      = '192.168.78.90'
+       self.user      = user
+       self.passw     = passwd
+       self.ip        = ip
        self.obj_mover = MoverCam(self.ip,self.user,self.passw)
 
 
@@ -152,5 +165,5 @@ class Mando:
         hilo.start()
 
 if __name__ == '__main__' :
-    mando = Mando()
+    mando = Mando('admin','Admin321','192.168.78.90')
     mando.process()
