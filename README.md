@@ -36,6 +36,8 @@ La clase principal de este archivo se llama Mando() y tiene los siguientes pará
 Se debe tener un mando o joystick conectado al PC y para su ejecución, escribir lo siguiente:
 
 Uso, ejemplo:
+
 mando = Mando('admin','Admin321','192.168.78.90')
-mando.process(
+
+mando.process()
 
