@@ -1,0 +1,16 @@
+item         | X  |  Y  | SPEED/TIMEOUT
+----------------------------------------------
+derecha      |  1 |  0  | 0.15
+izquierda    | -1 |  0  | 0.15
+arriba       |  0 |  1  | 0.15
+abajo        |  0 | -1  | 0.15
+diag_sup_der |  1 |  1  | 0.15
+diag_inf_der |  1 | -1  | 0.15
+diag_sup_izq | -1 |  1  | 0.15
+diag_inf_izq | -1 | -1  | 0.15
+zoom_up      | ND | ND  | 0.25
+zoom_down    | ND | ND  | 0.15
+----------------------------------------------
+
+ND = No Data
+

@@ -15,6 +15,12 @@ class CamsTh(QObject) :
         self.h = 540
         self.font = cv2.FONT_ITALIC
   
+
+    def cambiarTam(self,ancho,alto):
+        self.w = ancho
+        self.h = alto
+
+
     #@pyqtSlot
     def run(self):
   
@@ -22,10 +28,9 @@ class CamsTh(QObject) :
             ret , frame = self.cap.read()
       
             if ret :
-
-                dt1 = datetime.datetime.now()
-                dt = dt1.strftime("%Y-%m-%d %H:%M:%S:%f")[:-3]
-                osd1 = 'IP CAM ' + dt
+                #dt1 = datetime.datetime.now()
+                #dt = dt1.strftime("%Y-%m-%d %H:%M:%S:%f")[:-3]
+                #osd1 = 'IP CAM ' + dt
                 #frame =cv2.putText(frame, osd1,
                 #            (10, 100),
                 #            self.font, 1,
@@ -38,3 +43,9 @@ class CamsTh(QObject) :
                 self.cap = cv2.VideoCapture( self.url )
         
             #self.ch_signal.emit()
+    
+    def estado(self) :
+        if self.cap.isOpened() :
+            return True
+        else :
+            return False

@@ -21,36 +21,46 @@ from PyQt5.QtGui import QFont, QPixmap, QImage
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QMessageBox
 import sys
 from claseMov import *
-from joystickPtz import *
 import threading
-
+from ping3 import ping
+import subprocess
+import time
+import qtawesome as qta
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         super().__init__()
-        #self.mando = Mando()
-        #self.mando.process()
-        
 
+        #video
+        self.counter = 0
         self.user    = 'admin'
         self.passw   = 'Admin321'
         self.ip      = '192.168.78.90'
-        self.url = f'rtsp://{self.user}:{self.passw}@{self.ip}:554/h264/ch1/main/av_stream'    
-        self.w = 960
-        self.h = 540
+        self.url     = f'rtsp://{self.user}:{self.passw}@{self.ip}:554/h264/ch1/main/av_stream'    
+        self.w       = 960
+        self.h       = 540
 
+        #970, 60 COORDENADAS DEL WIDGET DE BOTONES
+        self.x_widget = 980
+        self.y_widget = 60
+
+
+
+        self.videoPTZ = videoThread2.CamsTh( self.url  )
         self.obj_mover = MoverCam(self.ip,self.user,self.passw)
-
-        print("Esto es equivalente al constructor!!!")
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1300, 560)
         
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        
         self.videoLabel = QtWidgets.QLabel(self.centralwidget)
-        self.videoLabel.setGeometry(QtCore.QRect(5, 10, 960, 540))
+        self.videoLabel.setGeometry(QtCore.QRect(5, 10, self.w, self.h))
         self.videoLabel.setStyleSheet("background-color : rgb(0, 0, 0);")
         self.videoLabel.setText("")
+        self.videoLabel.mouseDoubleClickEvent = self.ejemplo_click_label
+
         self.videoLabel.setObjectName("videoLabel")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(1100, 20, 171, 20))
@@ -62,12 +72,15 @@ class Ui_MainWindow(object):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(970, 60, 500, 300))
-        self.widget.setStyleSheet("")
+        self.widget.setGeometry(QtCore.QRect(self.x_widget, self.y_widget, 350, 300))
+        self.widget.setStyleSheet("background-color:rgb(239,239,239,80);padding-bottom:5px;padding-top:5px;")
         self.widget.setObjectName("widget")
+
+        cam_icon = qta.icon('fa5.flag')
         self.btn_up = QtWidgets.QPushButton(self.widget)
         self.btn_up.setGeometry(QtCore.QRect(125, 120, 93, 28))
         self.btn_up.setObjectName("btn_up")
+
         self.btn_down = QtWidgets.QPushButton(self.widget)
         self.btn_down.setGeometry(QtCore.QRect(125, 210, 93, 28))
         self.btn_down.setObjectName("btn_down")
@@ -112,6 +125,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        
+        #utilizamos esto para arrancar otro script al mmismo tiempo
+        subprocess.call(["python","sp1.py"])
+    
        
 
     def retranslateUi(self, MainWindow):
@@ -119,14 +136,16 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Testeando PTZ, By CGH"))
         
         self.label_2.setText(_translate("MainWindow", "PTZ TEST"))
+        
+
         self.btn_up.setText(_translate("MainWindow", "Up"))
         self.btn_down.setText(_translate("MainWindow", "Down"))
         self.btn_left.setText(_translate("MainWindow", "left"))
         self.btn_right.setText(_translate("MainWindow", "Right"))
         self.btn_diag_sup_izq.setText(_translate("MainWindow", "Diagonal Sup Iz"))
         self.btn_diag_inf_izq.setText(_translate("MainWindow", "Diagonal Inf Iz"))
-        self.btn_zoomIn.setText(_translate("MainWindow", "Zoom In (+)"))
-        self.btn_zoomOut.setText(_translate("MainWindow", "Zoom Out (-)"))
+        self.btn_zoomIn.setText(_translate("MainWindow", "Zoom (+)"))
+        self.btn_zoomOut.setText(_translate("MainWindow", "Zoom (-)"))
 
         self.label.setText(_translate("MainWindow", "X"))
         self.btn_diag_sup_der.setText(_translate("MainWindow", "Diagonal Sup Der"))
@@ -134,87 +153,130 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "By CGH"))
         self.videoLabel.setText("NO IMAGE")
         self.videoLabel.setStyleSheet("background-color: #000000;color:#FFFFFF;text-align:center;")
-        print("llamando funciones....")
-        
-        
+        print("llamando funciones....")   
         self.showCam()
 
-        #llamando a funciones PTZ
-        self.btn_up.clicked.connect(self.moveUp)
-        self.btn_down.clicked.connect(self.moveDown)
-        self.btn_left.clicked.connect(self.moveLeft)
-        self.btn_right.clicked.connect(self.moveRight)
-        self.btn_diag_sup_izq.clicked.connect(self.diagonalIzqSup)
-        self.btn_diag_sup_der.clicked.connect(self.diagonalDerSup)
-        self.btn_diag_der_inf.clicked.connect(self.diagonalDerInf)
-        self.btn_diag_inf_izq.clicked.connect(self.diagonalIzqInf)
-        self.btn_zoomIn.clicked.connect(self.zoomIn)
-        self.btn_zoomOut.clicked.connect(self.zoomOut)
+
+        if self.videoPTZ.estado() :
+            #llamando a funciones PTZ
+            self.btn_up.clicked.connect(self.moveUp)
+            self.btn_down.clicked.connect(self.moveDown)
+            self.btn_left.clicked.connect(self.moveLeft)
+            self.btn_right.clicked.connect(self.moveRight)
+            self.btn_diag_sup_izq.clicked.connect(self.diagonalIzqSup)
+            self.btn_diag_sup_der.clicked.connect(self.diagonalDerSup)
+            self.btn_diag_der_inf.clicked.connect(self.diagonalDerInf)
+            self.btn_diag_inf_izq.clicked.connect(self.diagonalIzqInf)
+            self.btn_zoomIn.clicked.connect(self.zoomIn)
+            self.btn_zoomOut.clicked.connect(self.zoomOut)
+        else :
+            print("Video Offline")
+
 
 
     #mostrar imagenes
     def showCam(self) :
         self.thread = QThread()
-        self.videoPTZ = videoThread2.CamsTh( self.url  )
         self.videoPTZ.ch_signal.connect( self.ch_signal )
         self.videoPTZ.moveToThread( self.thread )
         self.thread.started.connect( self.videoPTZ.run )
         self.thread.start()
+        print("video online")
 
      
-
     def ch_signal(self,px) : 
-        QImg = QImage(px, self.w, self.h, QImage.Format_RGB888)        
-        pixMap = QPixmap.fromImage(QImg)
-        self.videoLabel.setPixmap( pixMap)
+        if self.videoPTZ.estado() :
+            QImg = QImage(px, self.w, self.h, QImage.Format_RGB888)        
+            pixMap = QPixmap.fromImage(QImg)
+            self.videoLabel.setPixmap( pixMap)
+        else: 
+            QImg = QImage("luffy.png")        
+            pixMap = QPixmap.fromImage(QImg)
+            self.videoLabel.setPixmap( pixMap)
+
 
     #movimientos PTZ // Calling movement functions
     def moveUp(self):
         #self.obj_mover.moves(1)
         hilo = threading.Thread(target=self.obj_mover.moves,kwargs={'num':1})
         hilo.start()
-
+        
     def moveDown(self):
         #self.obj_mover.moves(2)
         hilo = threading.Thread(target=self.obj_mover.moves,kwargs={'num':2})
         hilo.start()
-    
+        
     def moveLeft(self):
         #self.obj_mover.moves(3)
         hilo = threading.Thread(target=self.obj_mover.moves,kwargs={'num':3})
         hilo.start()
-
+        
     def moveRight(self):
         #self.obj_mover.moves(4)
         hilo = threading.Thread(target=self.obj_mover.moves,kwargs={'num':4})
         hilo.start()
+        
 
     def zoomIn(self) :
         #self.obj_mover.moves(5)
         hilo = threading.Thread(target=self.obj_mover.moves,kwargs={'num':5})
         hilo.start()
-
+        
     def zoomOut(self) :
         #self.obj_mover.moves(6)
         hilo = threading.Thread(target=self.obj_mover.moves,kwargs={'num':6})
         hilo.start()
-
+        
     def diagonalIzqSup(self) :
         hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':9})
         hilo.start()
-
+        
     def diagonalIzqInf(self) :
         hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':10})
         hilo.start()
-
+        
     def diagonalDerSup(self) :
         hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':7})
         hilo.start()
-
+        
     def diagonalDerInf(self) :
         hilo = threading.Thread(target=self.obj_mover.moves, kwargs={'num':8})
         hilo.start()
-    
+        
+    # el estado de ping establece resultados booleanos si es 
+    # que hay conexion con distintas ip
+    def estadoPing(self,ip,timeout=1):
+        try:
+            result = ping(ip,timeout)
+
+            if result==None or result == False:
+                res = False
+            else:
+                res = True
+            return res
+        except :
+            return False
+
+    def ejemplo_click_label(self,*arg, **kwargs):
+        print("Has clickeado!!!")
+        print(f"Veces que has clickeado:{self.counter+1}")
+
+        if self.counter % 2 != 0 :
+            self.w = 960
+            self.h = 540
+            self.x_widget = 980
+            self.y_widget = 60
+        else : 
+            self.w = 1920
+            self.h = 1080
+            self.x_widget = 1550
+            self.y_widget = 650
+
+        self.widget.setGeometry(QtCore.QRect(self.x_widget, self.y_widget, 350, 300))
+        self.videoLabel.resize(self.w,self.h)
+        self.videoPTZ.cambiarTam(self.w,self.h)
+
+        self.counter += 1
 
 if __name__ == "__main__":
     import sys
